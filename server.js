@@ -24,6 +24,8 @@ var SampleApp = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+        self.db_host   = process.env.OPENSHIFT_MYSQL_DB_HOST;
+        self.db_port   = process.env.OPENSHIFT_MYSQL_DB_PORT;
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -143,6 +145,7 @@ var SampleApp = function() {
         self.app.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
                         Date(Date.now() ), self.ipaddress, self.port);
+            console.log('DB HOST : %s \n DB PORT : %d', self.db_host, self.db_port);
         });
     };
 
