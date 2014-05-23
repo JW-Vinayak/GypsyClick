@@ -23,7 +23,7 @@ var SampleApp = function() {
     self.setupVariables = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8084;
         self.db_host   = process.env.OPENSHIFT_MYSQL_DB_HOST;
         self.db_port   = process.env.OPENSHIFT_MYSQL_DB_PORT;
 
@@ -106,6 +106,11 @@ var SampleApp = function() {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
         };
+        
+        self.routes['/query'] = function(req, res) {
+            require('./db_connect')(req,res);
+        };
+        
     };
 
 
