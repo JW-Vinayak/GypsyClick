@@ -3,8 +3,8 @@ var Sequelize = require("sequelize")
 module.exports = function(req, res) {
 	
 	var sequelize = new Sequelize('app', 'adminNHDvZWr', 'nSD9at8eWTAS', {
-		  host: "127.8.179.130",
-		  port: "3306"
+		  host: process.env.OPENSHIFT_MYSQL_DB_HOST || "127.0.0.1",
+		  port: process.env.OPENSHIFT_MYSQL_DB_PORT || 3306
 		})
 	
 	

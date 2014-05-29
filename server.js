@@ -2,6 +2,7 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
+var Path 	= require('path');
 
 
 /**
@@ -95,32 +96,40 @@ var SampleApp = function() {
      *  Create the routing table entries + handlers for the application.
      */
     self.createRoutes = function() {
-        self.routes = { };
-
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
-
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
-        };
-        
-        self.routes['/query'] = function(req, res) {
-            require('./db_connect')(req,res);
-        };
-        
+        var r = require(Path.normalize(__dirname) + '/lib/controller/routes'); 
+        self.routes = r.routes;
+        console.log(self.routes);
     };
 
+    self.initializeModels = function(){
+    	var model, deploymentDB,
+        homeDir = Path.normalize(__dirname),
+            modelDir = homeDir + '/lib/model';
+
+    	
+        model = require(modelDir);
+        /*model.init(function(err) {
+            if (err) {
+            	console.log(err);
+                console.error('Could not open Database Models.');
+                //return callback(err);
+            }
+            else
+            console.log('\t- Database Models are initialized');
+            //callback(null);
+        });*/
+    }
 
     /**
      *  Initialize the server (express) and create the routes and register
      *  the handlers.
      */
     self.initializeServer = function() {
+    	self.initializeModels();
         self.createRoutes();
         self.app = express();
+        
+        self.app.use('/static', express.static(Path.normalize(__dirname)+'/public')); //how to tweak this to cache different value
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
