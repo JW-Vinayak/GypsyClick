@@ -3,6 +3,7 @@
 var express = require('express');
 var fs      = require('fs');
 var Path 	= require('path');
+var Moment 	= require('moment');
 
 
 /**
@@ -155,6 +156,13 @@ var SampleApp = function() {
      *  Start the server (starts up the sample application).
      */
     self.start = function() {
+    	
+    	var end = new Moment(Moment("05/26/2014" + " 00:00:00").format('YYYY-MM-DDTHH:mm:ss') + "Z");
+    	console.log('actual date : ' + end.toDate().toString());
+    	
+    	var con = new Moment(Moment("05/26/2014" + " 00:00:00").format('YYYY-MM-DDTHH:mm:ss') + "-0800");
+    	console.log('pst date : ' + con.toDate().toString());
+    	
         //  Start the app on the specific interface (and port).
         self.app.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
